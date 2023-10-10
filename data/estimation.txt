@@ -1,0 +1,54 @@
+ANALISIS DE COMPLEJIDAD DEL CÓDIGO:
+
+1) INVARIANTES:
+
+A) Propiedad del Heap: En un heap (una estructura de datos similar a un árbol), siempre hay un elemento especial en la parte superior que es el más grande o el más pequeño, dependiendo del tipo de heap que sea. Esta propiedad asegura que este elemento especial siempre esté en la parte superior y que los demás elementos estén organizados de manera que todos los elementos a la izquierda y a la derecha de cualquier nivel sean menores o iguales (en un max-heap) o mayores o iguales (en un min-heap) que el elemento en ese nivel.
+
+B) Estructura de Árbol Completo: Un heap es como un árbol, pero tiene una regla especial: cada nivel del árbol debe estar lleno de izquierda a derecha, excepto tal vez el último nivel. Esto significa que el árbol tiene una forma predecible y compacta.
+
+C) Orden de Inserción: Si dos elementos tienen el mismo valor en un heap, el que se agregó primero se encuentra más arriba en el árbol. Esto significa que el orden en que se agregan los elementos afecta su posición en el heap.
+
+D) Número de Elementos: El número de elementos en el heap debe coincidir con la cantidad de elementos que se han agregado y eliminado correctamente. Por ejemplo, si agregamos 5 elementos y eliminamos 2, deberíamos tener 3 elementos en el heap.
+
+Estas reglas son esenciales para asegurarnos de que un heap funcione correctamente y de que siempre podamos encontrar el elemento más grande o más pequeño rápidamente. Mantener estas reglas en todo momento garantiza un funcionamiento adecuado.
+
+
+2) OPERACIONES DEL HEAP
+
+A) Agregar un elemento (add):
+
+Complejidad: O(log n)
+Justificación: Cuando se agrega un elemento al heap, primero se inserta al final del array (o lista) subyacente, lo que es una operación O(1). Luego, se realiza la operación sift-up, que involucra comparaciones y posibles intercambios a lo largo del camino desde el nodo insertado hasta la raíz. Dado que la altura máxima de un heap binario completo es logarítmica en función del número de elementos n, la operación sift-up tiene una complejidad de O(log n).
+
+B) Retornar el elemento máximo/mínimo (peek):
+
+Complejidad: O(1)
+Justificación: El elemento máximo en un max-heap (o mínimo en un min-heap) siempre se encuentra en la raíz del árbol, por lo que acceder a él es una operación O(1) ya que se encuentra en la posición 0 del array subyacente.
+
+C) Retirar el elemento máximo/mínimo (poll):
+
+Complejidad: O(log n)
+Justificación: Cuando se retira el elemento máximo en un max-heap (o mínimo en un min-heap), se elimina el elemento en la raíz del árbol y se reemplaza por el último elemento del array. Luego, se realiza la operación sift-down, que implica comparaciones y posibles intercambios a lo largo del camino desde la raíz hasta las hojas. Dado que la altura máxima del heap binario completo es logarítmica en función de n, la operación sift-down tiene una complejidad de O(log n).
+
+D) Mover el último elemento arriba en el árbol (sift-up):
+
+Complejidad: O(log n)
+Justificación: Esta operación se realiza después de agregar un nuevo elemento al heap. Implica comparaciones y posibles intercambios a lo largo del camino desde el nodo insertado hasta la raíz. Dado que la altura máxima del heap binario completo es logarítmica en función del número de elementos n, la operación sift-up tiene una complejidad de O(log n).
+
+E)Mover la raíz abajo en el árbol (sift-down):
+
+Complejidad: O(log n)
+Justificación: Esta operación se realiza después de retirar el elemento máximo en un max-heap (o mínimo en un min-heap) y reemplazarlo con el último elemento. Implica comparaciones y posibles intercambios a lo largo del camino desde la raíz hasta las hojas. Dado que la altura máxima del heap binario completo es logarítmica en función de n, la operación sift-down tiene una complejidad de O(log n).
+
+3) ORDENAR LOS PEDIDOS POR PRECIO Y CERCANIA 
+
+A) Ordenar Pedidos por Precio (max-heap):
+
+Complejidad: O(n * log n)
+Justificación: Para ordenar pedidos por precio, se agrega cada pedido al max-heap, lo que implica n operaciones add con una complejidad de O(log n) cada una. Luego, se realizan n operaciones poll con una complejidad de O(log n) cada una. Por lo tanto, la complejidad total es O(n * log n).
+
+B) Ordenar Pedidos por Cercanía (min-heap):
+
+Complejidad: O(n * log n)
+Justificación: Para ordenar pedidos por cercanía, se agrega cada pedido al min-heap, lo que implica n operaciones add con una complejidad de O(log n) cada una. Luego, se realizan n operaciones poll con una complejidad de O(log n) cada una. Por lo tanto, la complejidad total es O(n * log n).
+En ambos casos de ordenación, la complejidad predominante es la de agregar elementos y retirar elementos del heap, que es O(n * log n) en el peor caso debido a las operaciones de add y poll.

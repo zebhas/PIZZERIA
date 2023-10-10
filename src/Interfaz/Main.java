@@ -52,7 +52,7 @@ public class Main {
         boolean end = false;
         while (!end) {
             imprimirArchivo("./data/interfazUsuario.txt");
-            System.out.println("Seleccione una opcion:");
+            System.out.println("Seleccione una opción:");
             int option = Integer.parseInt(br.readLine());
             if (option == 1) {
                 System.out.println("Escriba el primer nombre del autor del pedido:");
@@ -116,6 +116,7 @@ public class Main {
 
     static void imprimirColas(Pizzeria pizzeria) {
         imprimirColaPedidosRecibidos(pizzeria);
+        imprimirColaPedidosAtendidos(pizzeria);
         imprimirColaDespachos(pizzeria);
         System.out.println();
         System.out.println();
@@ -135,27 +136,41 @@ public class Main {
         System.out.println();
     }
 
-    private static void imprimirColaDespachos(Pizzeria pizzeria) {
-        System.out.println("      COLA DESPACHOS      ");
+    private static void imprimirColaPedidosAtendidos(Pizzeria pizzeria) {
+        System.out.println("    PEDIDOS ATENDIDOS    ");
         int index = 1;
+
         try {
-            for (Pedido p : pizzeria.colaDespachosList()) {
-                System.out.printf("%d. %s (%d mts.)%n", index++, p.getAutorPedido(), p.getCercania());
+            for (Pedido p : pizzeria.pedidosAtendidosList()) {
+                System.out.printf("%d. %s (%.2f)%n", index++, p.getAutorPedido(), p.getPrecio());
             }
         } catch (java.lang.NullPointerException e) {
-            System.out.println("Cola Pizzeria vacía");
+            System.out.println("Cola pizzeria vacía");
         }
+        System.out.println();
     }
 
-    static void imprimirArchivo(String nombre) {
-        try (BufferedReader br = new BufferedReader(new FileReader(nombre))) {
-            String line = null;
+    private static void imprimirColaDespachos(Pizzeria pizzeria) {
+        System.out.println("    COLA DE DESPACHOS    ");
+        int index = 1;
+
+        try {
+            ArrayList<Pedido> colaDespachos = new ArrayList<>(pizzeria.colaDespachosList());
+            for (Pedido p : colaDespachos) {
+                System.out.printf("%d. %s (%d mts)%n", index++, p.getAutorPedido(), p.getCercania());
+            }
+        } catch (java.lang.NullPointerException e) {
+            System.out.println("Cola de despachos vacía");
+        }
+        System.out.println();
+    }
+
+    static void imprimirArchivo(String filename) throws Exception {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
             }
-            br.close();
-        } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
         }
     }
 }

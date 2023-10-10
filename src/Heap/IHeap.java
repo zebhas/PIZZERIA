@@ -5,6 +5,8 @@
  */
 package Heap;
 
+import java.util.List;
+
 public interface IHeap<T> {
 
 	/**
@@ -47,5 +49,6 @@ public interface IHeap<T> {
 	 * Es usado para restaurar la condición de heap luego de la eliminación o reemplazo.
 	 */
 	void siftDown();
-
+        
+        
 }

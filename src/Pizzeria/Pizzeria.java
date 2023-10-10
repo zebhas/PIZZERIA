@@ -5,43 +5,42 @@
  */
 package Pizzeria;
 
-
-
 import java.util.ArrayList;
 import Heap.Heap;
 import java.util.Comparator;
 
-public class Pizzeria {
+import Heap.MinHeap;
+import java.util.Collections;
 
-    private Heap<Pedido> pedidosRecibidos;
-    private ArrayList<Pedido> colaDespachos;
+public class Pizzeria {
+    
+    private Heap<Pedido> pedidosRecibidos; // Heap para organizar por precio
+    private MinHeap<Pedido> pedidosAtendidos; // MinHeap para organizar por precio
+    private MinHeap<Pedido> colaDespachos; // MinHeap para organizar por cercanía
 
     public Pizzeria() {
         pedidosRecibidos = new Heap<>();
-        colaDespachos = new ArrayList<>();
+        pedidosAtendidos = new MinHeap<>(Comparator.comparingInt(Pedido::getCercania)); // Usar un MinHeap para ordenar por precio
+        colaDespachos = new MinHeap<>(Comparator.comparingInt(Pedido::getCercania)); // Usar un MinHeap para ordenar por cercanía
     }
 
-  public Pedido agregarPedido(String nombreAutor, double precio, int cercania) {
-    Pedido pedido = new Pedido(nombreAutor, precio, cercania);
-    pedidosRecibidos.add(pedido);
-    return pedido; 
-}
-
-   public Pedido atenderPedido() {
-    Pedido pedidoAtendido = pedidosRecibidos.poll();
-    if (pedidoAtendido != null) {
-        colaDespachos.add(pedidoAtendido);
+    public Pedido agregarPedido(String nombreAutor, double precio, int cercania) {
+        Pedido pedido = new Pedido(nombreAutor, precio, cercania);
+        pedidosRecibidos.add(pedido);
+        return pedido;
     }
-    return pedidoAtendido;
-}
 
-   public Pedido despacharPedido() {
-    if (!colaDespachos.isEmpty()) {
-        // Ordenar la colaDespachos por cercanía de menor a mayor
-        colaDespachos.sort(Comparator.comparingInt(Pedido::getCercania));
-        return colaDespachos.remove(0);
+    public Pedido atenderPedido() {
+        Pedido pedidoAtendido = pedidosRecibidos.poll();
+        if (pedidoAtendido != null) {
+            pedidosAtendidos.add(pedidoAtendido);
+            colaDespachos.add(pedidoAtendido);
+        }
+        return pedidoAtendido;
     }
-    return null;
+
+    public Pedido despacharPedido() {
+    return colaDespachos.poll();
 }
 
     public ArrayList<Pedido> pedidosRecibidosList() {
@@ -54,11 +53,36 @@ public class Pizzeria {
             copiaPedidosRecibidos.add(pedido);
         }
 
-        pedidosRecibidos = copiaPedidosRecibidos; // Restaurar el heap original
+        pedidosRecibidos = copiaPedidosRecibidos;
         return listaPedidos;
     }
 
-    public ArrayList<Pedido> colaDespachosList() {
-        return colaDespachos;
+    public ArrayList<Pedido> pedidosAtendidosList() {
+        ArrayList<Pedido> listaPedidosAtendidos = new ArrayList<>(pedidosAtendidos.size());
+
+        while (!pedidosAtendidos.isEmpty()) {
+            listaPedidosAtendidos.add(pedidosAtendidos.poll());
+        }
+
+        for (Pedido pedido : listaPedidosAtendidos) {
+            pedidosAtendidos.add(pedido);
+        }
+
+        return listaPedidosAtendidos;
     }
+
+    public ArrayList<Pedido> colaDespachosList() {
+    ArrayList<Pedido> listaColaDespachos = new ArrayList<>(colaDespachos.size());
+
+    while (!colaDespachos.isEmpty()) {
+        listaColaDespachos.add(colaDespachos.poll());
+    }
+
+    // Restaurar los pedidos a la cola de despachos original
+    for (Pedido pedido : listaColaDespachos) {
+        colaDespachos.add(pedido);
+    }
+
+    return listaColaDespachos;
+}
 }
